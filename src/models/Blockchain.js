@@ -1,3 +1,5 @@
+import {maxBy, prop, reduce, reverse, unfold, values} from "ramda";
+
 
 // Blockchain
 class Blockchain {
@@ -10,8 +12,7 @@ class Blockchain {
   constructor(name) {
     this.blocks=[]
     this.name=name
-    this.genesis=null//创世区块
-    //储存区块
+    this.genesis=null
     }
     
 
@@ -19,51 +20,37 @@ class Blockchain {
   /* 
     返回当前链中最长的区块信息列表
   */
-
-    /*
-  longestChain(blocks) {
-     let longestChainLen=0;
-      let longestChainBlock=null;
-
-    for(let a=0;a<blocks.length;a++){
-      const currentBlock=blocks[i]
-      let cuurrentChainLen=1;
-      let previoushash=currentBlock.previoushash;
-
-      while(previoushash !== null){
-        for(let j=0;j<blocks.length;j++){
-          if(blocks[j].hash==previoushash){
-            cuurrentChainLen++;
-            previoushash=blocks[j].previoushash;
-            break;
-          }
-        }
-      }
-      if(cuurrentChainLen>longestChainLen){
-        longestChainLen=cuurrentChainLen;
-        longestChainBlock=currentBlock;
-      }
+    maxHeightBlock() {
+      //const blocks = values(this.blocks);
+      const maxByHeight = maxBy(prop("height"));
+      const maxHeightBlock = reduce(maxByHeight, blocks[0], blocks);
+      return maxHeightBlock;
     }
-    while(longestChainBlock!==null){
-      longestChainBlockList.push(longestChainBlock);
-      for(let i=0;i<blocks.length;i++){
-        if(blocks[i].hash===longestChainBlock.previoushash){
-          longestChainBlock=blocks[i];
-          break;
-        }
-      }
-    }
-return this.longestChain;
-
-    return []
- //}
- */
     longestChain() {
-      let blocks = Object.values(this.blocks);
-      blocks.sort((a, b) => a.height - b.height);
-      return blocks;
-       //return this.blocks;
+      const getParent = x => {
+        if (x === undefined) {
+          return false;
+        }
+  
+        return [x, this.blocks[x.previousHash]];
+      };
+      return reverse(unfold(getParent, this.maxHeightBlock()));
+      
+     /*
+     const blocks1=values(this.blocks)
+     const longestchain=[]
+     longestchain[0]=blocks1[0]
+     for(let i=1;i<blocks1.length;i++){
+      if(blocks1[i].previousHash==longestchain[i-1].hash){
+        longestchain[i]=blocks1[i]
+      }else if(blocks1[i].previousHash==longestchain[i-1].previousHash & blocks1[i+1].previousHash==blocks1[i].hash){
+        longestchain[i-1]=blocks1[i]
+        longestchain[i]=blocks1[i+1]
+      }
+      return longestchain
+     }
+     */
+    }
  }
 
-}
 export default Blockchain
