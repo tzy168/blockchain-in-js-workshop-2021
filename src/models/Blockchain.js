@@ -1,4 +1,3 @@
-import {maxBy, prop, reduce, reverse, unfold, values} from "ramda";
 
 
 // Blockchain
@@ -20,36 +19,21 @@ class Blockchain {
   /* 
     返回当前链中最长的区块信息列表
   */
-    maxHeightBlock() {
-      //const blocks = values(this.blocks);
-      const maxByHeight = maxBy(prop("height"));
-      const maxHeightBlock = reduce(maxByHeight, blocks[0], blocks);
-      return maxHeightBlock;
-    }
+    
     longestChain() {
-      const getParent = x => {
-        if (x === undefined) {
-          return false;
-        }
+      let maxHeight = Math.max(...Object.values(this.blocks).map(block => block.height))
+      let currentBlock = Object.values(this.blocks).find(block => block.height === maxHeight)
+      let longestChain = []
   
-        return [x, this.blocks[x.previousHash]];
-      };
-      return reverse(unfold(getParent, this.maxHeightBlock()));
-      
-     /*
-     const blocks1=values(this.blocks)
-     const longestchain=[]
-     longestchain[0]=blocks1[0]
-     for(let i=1;i<blocks1.length;i++){
-      if(blocks1[i].previousHash==longestchain[i-1].hash){
-        longestchain[i]=blocks1[i]
-      }else if(blocks1[i].previousHash==longestchain[i-1].previousHash & blocks1[i+1].previousHash==blocks1[i].hash){
-        longestchain[i-1]=blocks1[i]
-        longestchain[i]=blocks1[i+1]
+      while (currentBlock) {
+        longestChain.push(currentBlock)
+        currentBlock = Object.values(this.blocks).find(
+            (block) => block.hash === currentBlock.previousHash
+        )
       }
-      return longestchain
-     }
-     */
+  
+      return longestChain.reverse();
+      
     }
  }
 
