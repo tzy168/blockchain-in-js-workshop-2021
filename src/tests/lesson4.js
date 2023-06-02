@@ -1,11 +1,8 @@
 import Block, { DIFFICULTY } from '../models/Block.js'
 import Blockchain from '../models/Blockchain.js'
 import Transaction from '../models/Transaction.js'
-
 import sha256 from 'crypto-js/sha256.js'
 import { calcNonce, validateHash } from '../utils.js'
-
-const { log, assert } = console
 
 const main = () => {
   const miner =
