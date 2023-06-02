@@ -1,4 +1,5 @@
 import UTXO from './UTXO.js'
+import { clone } from 'ramda'
 
 class UTXOPool {
   constructor(utxos = {}) {

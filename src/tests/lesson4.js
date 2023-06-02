@@ -4,6 +4,8 @@ import Transaction from '../models/Transaction.js'
 import sha256 from 'crypto-js/sha256.js'
 import { calcNonce, validateHash } from '../utils.js'
 
+const { log, assert } = console
+
 const main = () => {
   const miner =
     '04fc5783257a53bcfcc6e1ea3c5059393df15ef4a286f7ac4c771ab8caa67dd1391822f9f8c3ce74d7f7d2cb2055232c6382ccef5c324c957ef5c052fd57679e86'
